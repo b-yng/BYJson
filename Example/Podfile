@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'BYJson_Example' do
+  pod 'BYJson', :path => '../'
+
+  target 'BYJson_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
