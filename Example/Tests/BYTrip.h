@@ -11,17 +11,10 @@
 
 @interface BYTrip : NSObject
 
-JsonKey(id)
 @property (nonatomic, readonly) NSNumber *tripId;
-
 @property (nonatomic) NSNumber *distance;
-
-JsonKey(startDateTime)
 @property (nonatomic) NSDate *startDate;
-
-JsonKey(endDateTime)
 @property (nonatomic) NSDate *endDate;
-
 @property (nonatomic, readonly) NSDate *dateUpdated;
 //@property (nonatomic) QBSETripReviewState reviewState;
 @property (nonatomic) NSString *businessPurpose;

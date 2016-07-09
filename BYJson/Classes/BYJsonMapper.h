@@ -7,10 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define JsonKey(_BYKEY) @property (nonatomic, readonly) BOOL  _by_keyannotation_##_BYKEY;
-
-typedef id (^BYValueTransformerBlock)(id fromValue);
-
 @protocol BYJsonMappable <NSObject>
 
 @end

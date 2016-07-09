@@ -9,10 +9,6 @@
 #import <objc/runtime.h>
 #import "BYJsonMapperFormatters.h"
 
-@interface BYAnnotation : NSObject
-@property (nonatomic) NSString *jsonKey;
-@property (nonatomic, copy) id (^mapper)(id jsonValue);
-@end
 
 @interface BYProperty : NSObject
 @property (nonatomic) NSString *name;
@@ -40,28 +36,16 @@ static Class defaultFormattersClass;
     NSAssert([clazz conformsToProtocol:@protocol(BYJsonMappable)], @"Class must conform to BYJsonMappable protocol");
     
     NSObject<BYJsonMappable> *anInstance = [[clazz alloc] init];
-    NSArray *propertiesOrAnnotations = [self propertiesAndAnnotationsOfClass:clazz];
-    BYAnnotation *keyAnnotation = nil;
-    BYAnnotation *mapperAnnotation = nil;
+    NSArray<BYProperty*> *properties = [self propertiesOfClass:clazz];
     
-    for (id propertyOrAnnotation in propertiesOrAnnotations) {
-        if ([propertyOrAnnotation isKindOfClass:[BYAnnotation class]]) {
-            
-            BYAnnotation *annotation = propertyOrAnnotation;
-            if (annotation.jsonKey != nil) {
-                keyAnnotation = annotation;
-            } else if (annotation.mapper != nil) {
-                mapperAnnotation = annotation;
-            }
-            continue;
-        }
-        
+    for (id propertyOrAnnotation in properties) {
         BYProperty *property = propertyOrAnnotation;
         NSString *jsonKey = nil;
         
-        // grab json key from annotation
-        if (keyAnnotation != nil) {
-            jsonKey = keyAnnotation.jsonKey;
+        // check for custom key
+        BYMethod *jsonKeyMethod = [self jsonKeyMethodForPropertyName:property.name];
+        if ([clazz respondsToSelector:jsonKeyMethod.selector]) {
+            jsonKey = [self invokeMethod:jsonKeyMethod withClass:clazz object:nil];
         }
         
         // default to property name
@@ -79,18 +63,13 @@ static Class defaultFormattersClass;
             continue;
         }
         
-        // find method to transform json value
-        BYMethod *formatterMethod = [self formattedValueMethodForJsonKey:jsonKey];
-        
         // get formatted value if we have formatters available
         id formattedValue = nil;
         
-        // get formatted value from annotation
-        if (mapperAnnotation.mapper != nil) {
-            formattedValue = mapperAnnotation.mapper(jsonValue);
-        }
-        else if ([clazz respondsToSelector:formatterMethod.selector]) {
-            // check for formatter method at property scope
+        // find method to format json value
+        BYMethod *formatterMethod = [self formattedValueMethodForJsonKey:jsonKey];
+        if ([clazz respondsToSelector:formatterMethod.selector]) {
+            // check for formatter method at class scope
             formattedValue = [self invokeMethod:formatterMethod withClass:clazz object:jsonValue];
         }
         else {
@@ -108,7 +87,7 @@ static Class defaultFormattersClass;
             jsonValue = formattedValue;
         }
         
-//        NSAssert(jsonValue == nil || [jsonValue isKindOfClass:property.typeClass], @"json value type doesn't match property type");
+        NSAssert(jsonValue == nil || [jsonValue isKindOfClass:property.typeClass], @"json value type doesn't match property type");
         
         [anInstance setValue:jsonValue forKey:property.name];
     }
@@ -123,7 +102,7 @@ static Class defaultFormattersClass;
 #pragma mark - Helpers
 
 
-+ (NSArray *)propertiesAndAnnotationsOfClass:(Class)clazz {
++ (NSArray<BYProperty*> *)propertiesOfClass:(Class)clazz {
     Class clazzCursor = clazz;
     NSMutableArray *propertyArray = [[NSMutableArray alloc] init];
     
@@ -137,15 +116,6 @@ static Class defaultFormattersClass;
             // get name
             const char *propertyNameChars = property_getName(rawProperty);
             NSString *propertyNameString = [NSString stringWithUTF8String:propertyNameChars];
-            
-            // check if annotation
-            static NSString const *annotationKeyPrefix = @"_by_keyannotation_";
-            if ([propertyNameString hasPrefix:annotationKeyPrefix]) {
-                BYAnnotation *annotation = [[BYAnnotation alloc] init];
-                annotation.jsonKey = [propertyNameString substringFromIndex:annotationKeyPrefix.length];
-                [propertyArray addObject:annotation];
-                continue;
-            }
             
             // get type
             const char *propertyTypeAttributes = property_getAttributes(rawProperty);
@@ -209,6 +179,13 @@ static Class defaultFormattersClass;
         }
         return jsonPart;
     }
+}
+
++ (BYMethod *)jsonKeyMethodForPropertyName:(NSString *)propertyName {
+    BYMethod *method = [[BYMethod alloc] init];
+    method.name = [NSString stringWithFormat:@"jsonKeyFor%@", propertyName];
+    method.selector = NSSelectorFromString(method.name);
+    return method;
 }
 
 + (BYMethod *)formattedValueMethodForJsonKey:(NSString *)jsonKey {
