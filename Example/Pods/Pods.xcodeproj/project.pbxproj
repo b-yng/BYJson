@@ -20,6 +20,7 @@
 		EB6097D91D2F3A8D0064DD53 /* BYJsonMapperFormatters.h in Headers */ = {isa = PBXBuildFile; fileRef = EB6097D51D2F3A8D0064DD53 /* BYJsonMapperFormatters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EB6097DA1D2F3A8D0064DD53 /* BYJsonMapperFormatters.m in Sources */ = {isa = PBXBuildFile; fileRef = EB6097D61D2F3A8D0064DD53 /* BYJsonMapperFormatters.m */; };
 		EB6097DF1D30AB600064DD53 /* BYJson.h in Headers */ = {isa = PBXBuildFile; fileRef = EB6097DE1D30AAE00064DD53 /* BYJson.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EB6097EA1D318C600064DD53 /* BYJsonMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = EB6097E91D318C070064DD53 /* BYJsonMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FC1101455FC63BE1917C17B700052682 /* Pods-BYJson_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CB565B50BB49441E04301021B07C5943 /* Pods-BYJson_Tests-dummy.m */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,7 @@
 		EB6097D51D2F3A8D0064DD53 /* BYJsonMapperFormatters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BYJsonMapperFormatters.h; sourceTree = "<group>"; };
 		EB6097D61D2F3A8D0064DD53 /* BYJsonMapperFormatters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BYJsonMapperFormatters.m; sourceTree = "<group>"; };
 		EB6097DE1D30AAE00064DD53 /* BYJson.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BYJson.h; sourceTree = "<group>"; };
+		EB6097E91D318C070064DD53 /* BYJsonMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BYJsonMacros.h; sourceTree = "<group>"; };
 		F4078EB2AE0F91F93C9988D8607244B1 /* Pods-BYJson_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BYJson_Example-resources.sh"; sourceTree = "<group>"; };
 		F8181615EE7D540CAAC4A76589875A93 /* Pods-BYJson_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BYJson_Example-frameworks.sh"; sourceTree = "<group>"; };
 		FE8C8AB6EA151A93C0F8D8AC12C0ED15 /* BYJson-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BYJson-dummy.m"; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				EB6097DE1D30AAE00064DD53 /* BYJson.h */,
+				EB6097E91D318C070064DD53 /* BYJsonMacros.h */,
 				EB6097D31D2F3A8D0064DD53 /* BYJsonMapper.h */,
 				EB6097D41D2F3A8D0064DD53 /* BYJsonMapper.m */,
 				EB6097D51D2F3A8D0064DD53 /* BYJsonMapperFormatters.h */,
@@ -242,9 +245,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB6097DF1D30AB600064DD53 /* BYJson.h in Headers */,
+				EB6097EA1D318C600064DD53 /* BYJsonMacros.h in Headers */,
+				EB6097D71D2F3A8D0064DD53 /* BYJsonMapper.h in Headers */,
 				EB6097D91D2F3A8D0064DD53 /* BYJsonMapperFormatters.h in Headers */,
 				D21557C8DB695B41E1A0CF55BA90D723 /* BYJson-umbrella.h in Headers */,
-				EB6097D71D2F3A8D0064DD53 /* BYJsonMapper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

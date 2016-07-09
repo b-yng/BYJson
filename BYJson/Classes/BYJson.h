@@ -9,6 +9,8 @@
 #ifndef BYJson_h
 #define BYJson_h
 
+#import "BYJsonMacros.h"
 #import "BYJsonMapper.h"
+#import "BYJsonMapperFormatters.h"
 
 #endif /* BYJson_h */

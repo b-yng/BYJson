@@ -14,8 +14,9 @@
 
 @implementation BYTrip
 
-+ (NSString *)jsonKeyFortripId {
-    return @"id";
-}
+JsonKey(tripId, id)
+JsonKey(distance, tripMiles)
+JsonKey(startDate, startDateTime)
+JsonKey(endDate, endDateTime)
 
 @end
