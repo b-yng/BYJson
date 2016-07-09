@@ -57,6 +57,7 @@ static Class defaultFormattersClass;
         id jsonValue = [self valueFromJson:json forKey:jsonKey];
         if (jsonValue == nil) continue;
         
+        // TODO: this isnt true, what about enums?
         // primitives are already handled
         if (property.isPrimitive) {
             [anInstance setValue:jsonValue forKey:property.name];
@@ -66,20 +67,28 @@ static Class defaultFormattersClass;
         // get formatted value if we have formatters available
         id formattedValue = nil;
         
-        // find method to format json value
-        BYMethod *formatterMethod = [self formattedValueMethodForJsonKey:jsonKey];
+        // check for formatter method at class scope
+        BYMethod *formatterMethod = [self formattedValueMethodForPropertyName:property.name];
         if ([clazz respondsToSelector:formatterMethod.selector]) {
-            // check for formatter method at class scope
             formattedValue = [self invokeMethod:formatterMethod withClass:clazz object:jsonValue];
         }
-        else {
-            // check for recognized cases
-            formattedValue = [self recognizedFormattedValueWithClass:property.typeClass parentClass:clazz jsonValue:jsonValue jsonKey:jsonKey];
-        }
         
-        // check for default formatter methods
-        if (formattedValue == nil) {
-            formattedValue = [self formattedValueUsingFormatterClassWithDesiredClass:property.typeClass jsonValue:jsonValue];
+        // if we have property type info, we can check elsewhere for formatters (we won't have type info if it's type id)
+        if (property.typeClass != nil) {
+            
+            // check for default formatter methods
+            if (formattedValue == nil) {
+                formattedValue = [self formattedValueUsingFormatterClassWithDesiredClass:property.typeClass jsonValue:jsonValue];
+            }
+            
+            // check for recognized cases
+            if (formattedValue == nil) {
+                formattedValue = [self recognizedFormattedValueWithClass:property.typeClass parentClass:clazz jsonValue:jsonValue jsonKey:jsonKey];
+            }
+            
+            NSAssert(formattedValue == nil || [formattedValue isKindOfClass:property.typeClass],
+                     @"formatted json value class doesn't match property class; propertyName=%@; propertyClass=%@; jsonValueClass=%@",
+                     property.name, property.typeClass, [jsonValue class]);
         }
         
         // use formatted value, if we have one
@@ -87,7 +96,7 @@ static Class defaultFormattersClass;
             jsonValue = formattedValue;
         }
         
-        NSAssert(jsonValue == nil || [jsonValue isKindOfClass:property.typeClass], @"json value type doesn't match property type");
+        NSAssert(jsonValue != nil, @"json value nil; propertyName=%@", property.name);
         
         [anInstance setValue:jsonValue forKey:property.name];
     }
@@ -122,30 +131,41 @@ static Class defaultFormattersClass;
             NSString *propertyAttributesString = [NSString stringWithUTF8String:propertyTypeAttributes];
             NSArray<NSString*> *propertyAttributePartArray = [propertyAttributesString componentsSeparatedByString:@","];
             NSString *typeAttr = propertyAttributePartArray[0];
-            NSString *propertyType = [typeAttr substringFromIndex:1];
+            typeAttr = [typeAttr substringFromIndex:1]; // trim off 'T' prefix
+            
+            NSString *propertyType = [typeAttr substringWithRange:NSMakeRange(0, 1)];
             const char *rawPropertyType = [propertyType UTF8String];
             
             NSString *typeString = nil;
-            BOOL isPrimitive = NO;
+            BOOL isPrimitive = YES;
             
-            if ([typeAttr hasPrefix:@"T@"] && [typeAttr length] > 1) {
-                typeString = [typeAttr substringWithRange:NSMakeRange(3, typeAttr.length - 4)];  // @"NSNumber" -> NSNumber
-            }
-            else {
-                isPrimitive = YES;
+            if (strcmp(rawPropertyType, @encode(id)) == 0) {
+                isPrimitive = NO;
                 
-                if (strcmp(rawPropertyType, @encode(BOOL)) == 0) {
-                    typeString = @"BOOL";
+                if (typeAttr.length == 1) {
+                    typeString = @"id";
                 }
-                else if (strcmp(rawPropertyType, @encode(int)) == 0) {
-                    typeString = @"int";
+                else {
+                    // we have more type info to grab. The class is wrapped in quotes. @"NSNumber" -> NSNumber
+                    NSArray *parts = [typeAttr componentsSeparatedByString:@"\""];
+                    if (parts.count > 1) {
+                        typeString = parts[1];
+                    }
                 }
-                else if (strcmp(rawPropertyType, @encode(float)) == 0) {
-                    typeString = @"float";
-                }
-                else if (strcmp(rawPropertyType, @encode(double)) == 0) {
-                    typeString = @"double";
-                }
+                
+                NSAssert(typeString != nil, @"Failed to parse property with id encoding");
+            }
+            else if (strcmp(rawPropertyType, @encode(BOOL)) == 0) {
+                typeString = @"BOOL";
+            }
+            else if (strcmp(rawPropertyType, @encode(int)) == 0) {
+                typeString = @"int";
+            }
+            else if (strcmp(rawPropertyType, @encode(float)) == 0) {
+                typeString = @"float";
+            }
+            else if (strcmp(rawPropertyType, @encode(double)) == 0) {
+                typeString = @"double";
             }
             
             if (typeString != nil) {
@@ -188,9 +208,9 @@ static Class defaultFormattersClass;
     return method;
 }
 
-+ (BYMethod *)formattedValueMethodForJsonKey:(NSString *)jsonKey {
++ (BYMethod *)formattedValueMethodForPropertyName:(NSString *)propertyName {
     BYMethod *method = [[BYMethod alloc] init];
-    method.name = [NSString stringWithFormat:@"formattedValueFor%@WithJsonValue:", jsonKey];
+    method.name = [NSString stringWithFormat:@"formattedValueFor%@WithJsonValue:", propertyName];
     method.selector = NSSelectorFromString(method.name);
     return method;
 }

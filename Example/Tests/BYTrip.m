@@ -14,4 +14,8 @@
 
 @implementation BYTrip
 
++ (NSString *)jsonKeyFortripId {
+    return @"id";
+}
+
 @end
