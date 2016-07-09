@@ -1,0 +1,16 @@
+PODS:
+  - BYJson (0.1.0)
+
+DEPENDENCIES:
+  - BYJson (from `../`)
+
+EXTERNAL SOURCES:
+  BYJson:
+    :path: ../
+
+SPEC CHECKSUMS:
+  BYJson: 82b6183e509696dd5fd7f2955fc63d9023084686
+
+PODFILE CHECKSUM: 8c669b5ec8c6bfebba74d52a463e5fdf73f78154
+
+COCOAPODS: 1.0.0

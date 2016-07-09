@@ -1,0 +1,42 @@
+{
+    "id": 9273386,
+    "tripDateTime": 1467987729000,
+    "tripLocalDateTime": "2016-07-08",
+    "startDateTime": "2016-07-08T07:22:09-07:00",
+    "endDateTime": "2016-07-08T08:01:48-07:00",
+    "tripMiles": 32.8,
+    "business": false,
+    "reviewState": "UNREVIEWED",
+    "hasRoute": false,
+    "startAddress": {
+        "dateCreated": 1463672773000,
+        "dateUpdated": 1463672773000,
+        "addressLine1": "2965 Harrison Street",
+        "city": "San Francisco",
+        "state": "CA",
+        "postalCode": "94110",
+        "country": "US"
+    },
+    "endAddress": {
+        "dateCreated": 1459379416000,
+        "dateUpdated": 1459379416000,
+        "addressLine1": "2450 Bayshore Parkway",
+        "city": "Mountain View",
+        "state": "CA",
+        "postalCode": "94043",
+        "country": "US"
+    },
+    "startLocation": {
+        "longitude": -122.411637,
+        "latitude": 37.749971
+    },
+    "endLocation": {
+        "longitude": -122.095912,
+        "latitude": 37.425751
+    },
+    "userCreated": false,
+    "vehicleId": 6335,
+    "vehicleType": "CAR_TRUCK",
+    "vehicleDescription": "Fiat 500E",
+    "deduction": 0
+}

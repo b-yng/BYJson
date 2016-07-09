@@ -7,6 +7,8 @@
 //
 
 @import XCTest;
+#import <BYJson/BYJson.h>
+#import "BYTrip.h"
 
 @interface Tests : XCTestCase
 
@@ -26,9 +28,26 @@
     [super tearDown];
 }
 
-- (void)testExample
-{
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+- (void)testQBSETrip {
+    NSDictionary *json = [self jsonFromFileNamed:@"Trip"];
+    
+    BYTrip *trip = [BYTrip fromJson:json];
+    XCTAssertNotNil(trip);
+}
+
+- (NSDictionary *)jsonFromFileNamed:(NSString *)fileName {
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *filePath = [bundle pathForResource:fileName ofType:@"json"];
+    XCTAssertNotNil(filePath);
+    
+    NSData *jsonData = [NSData dataWithContentsOfFile:filePath];
+    XCTAssertNotNil(jsonData);
+    
+    NSError *error;
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&error];
+    XCTAssertNil(error, @"Error serializing json data; error=%@", error);
+    XCTAssertNotNil(json);
+    return json;
 }
 
 @end
