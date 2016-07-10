@@ -6,8 +6,8 @@
 //
 
 #import "BYJsonMapper.h"
-#import <objc/runtime.h>
 #import "BYJsonMapperFormatters.h"
+#import <objc/runtime.h>
 
 
 @interface BYProperty : NSObject
@@ -38,20 +38,8 @@ static Class defaultFormattersClass;
     NSObject<BYJsonMappable> *anInstance = [[clazz alloc] init];
     NSArray<BYProperty*> *properties = [self propertiesOfClass:clazz];
     
-    for (id propertyOrAnnotation in properties) {
-        BYProperty *property = propertyOrAnnotation;
-        NSString *jsonKey = nil;
-        
-        // check for custom key
-        BYMethod *jsonKeyMethod = [self jsonKeyMethodForPropertyName:property.name];
-        if ([clazz respondsToSelector:jsonKeyMethod.selector]) {
-            jsonKey = [self invokeMethod:jsonKeyMethod withClass:clazz object:nil];
-        }
-        
-        // default to property name
-        if (jsonKey == nil) {
-            jsonKey = property.name;
-        }
+    for (BYProperty *property in properties) {
+        NSString *jsonKey = [self jsonKeyForClass:clazz propertyName:property.name];
         
         // grab json value from dictionary and set if it's not null
         id jsonValue = [self valueFromJson:json forKey:jsonKey];
@@ -108,8 +96,38 @@ static Class defaultFormattersClass;
     defaultFormattersClass = formattersClass;
 }
 
++ (NSDictionary *)createJsonFromJsonMappable:(NSObject<BYJsonMappable> *)jsonMappable {
+    if (jsonMappable == nil) return nil;
+    
+    Class clazz = [jsonMappable class];
+    NSArray<BYProperty*> *properties = [self propertiesOfClass:clazz];
+    for (BYProperty *property in properties) {
+        NSString *jsonKey = [self jsonKeyForClass:clazz propertyName:property.name];
+        id jsonValue = [jsonMappable valueForKey:jsonKey];
+        
+    }
+    
+    return nil;
+}
+
 #pragma mark - Helpers
 
++ (NSString *)jsonKeyForClass:(Class)clazz propertyName:(NSString *)propertyName {
+    NSString *jsonKey = nil;
+    
+    // check for custom key
+    BYMethod *jsonKeyMethod = [self jsonKeyMethodForPropertyName:propertyName];
+    if ([clazz respondsToSelector:jsonKeyMethod.selector]) {
+        jsonKey = [self invokeMethod:jsonKeyMethod withClass:clazz object:nil];
+    }
+    
+    // default to property name
+    if (jsonKey == nil) {
+        jsonKey = propertyName;
+    }
+    
+    return jsonKey;
+}
 
 + (NSArray<BYProperty*> *)propertiesOfClass:(Class)clazz {
     Class clazzCursor = clazz;

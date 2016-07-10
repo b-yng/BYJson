@@ -9,6 +9,7 @@
 @import XCTest;
 #import <BYJson/BYJson.h>
 #import "BYTrip.h"
+#import "NSObject+BYDebugTools.h"
 
 @interface Tests : XCTestCase
 
@@ -32,6 +33,7 @@
     NSDictionary *json = [self jsonFromFileNamed:@"Trip"];
     
     BYTrip *trip = [BYTrip fromJson:json];
+    NSLog(@"trip=%@", trip.propertyDictionary);
     XCTAssertNotNil(trip);
 }
 
