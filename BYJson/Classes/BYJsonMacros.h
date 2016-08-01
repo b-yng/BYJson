@@ -15,4 +15,10 @@
         return @#_jsonKey; \
     } \
 
+#define JsonFormat(_propertyName, _formatBlock) \
+    + (id)formattedValueFor##_propertyName##WithJsonValue:(id)jsonValue { \
+        @selector(_propertyName); \
+        _formatBlock \
+    } \
+
 #endif /* BYJsonMacros_h */

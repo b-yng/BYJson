@@ -18,9 +18,6 @@ JsonKey(tripId, id)
 JsonKey(distance, tripMiles)
 JsonKey(startDate, startDateTime)
 JsonKey(endDate, endDateTime)
-
-+ (id)formattedValueForndDateWithJsonValue:(id)jsonValue {
-    return [BYJsonMapperFormatters NSDateFromNSString:jsonValue];
-}
+JsonFormat(endDate, { return [BYJsonMapperFormatters NSDateFromNSString:jsonValue]; })
 
 @end

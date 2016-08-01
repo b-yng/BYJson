@@ -29,6 +29,7 @@
 		EB6097E51D30B10D0064DD53 /* Trip.json in Resources */ = {isa = PBXBuildFile; fileRef = EB6097E31D30AE8C0064DD53 /* Trip.json */; };
 		EB6097E81D30B20F0064DD53 /* BYTrip.m in Sources */ = {isa = PBXBuildFile; fileRef = EB6097E71D30B20F0064DD53 /* BYTrip.m */; };
 		EB6097ED1D32B3450064DD53 /* NSObject+BYDebugTools.m in Sources */ = {isa = PBXBuildFile; fileRef = EB6097EC1D32B3450064DD53 /* NSObject+BYDebugTools.m */; };
+		EBF8687B1D34823C005221E6 /* BYAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF8687A1D34823C005221E6 /* BYAddress.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,8 @@
 		EB6097E71D30B20F0064DD53 /* BYTrip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BYTrip.m; sourceTree = "<group>"; };
 		EB6097EB1D32B3450064DD53 /* NSObject+BYDebugTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+BYDebugTools.h"; sourceTree = "<group>"; };
 		EB6097EC1D32B3450064DD53 /* NSObject+BYDebugTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+BYDebugTools.m"; sourceTree = "<group>"; };
+		EBF868791D34823C005221E6 /* BYAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BYAddress.h; sourceTree = "<group>"; };
+		EBF8687A1D34823C005221E6 /* BYAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BYAddress.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +185,8 @@
 			isa = PBXGroup;
 			children = (
 				EB6097E31D30AE8C0064DD53 /* Trip.json */,
+				EBF868791D34823C005221E6 /* BYAddress.h */,
+				EBF8687A1D34823C005221E6 /* BYAddress.m */,
 				EB6097E61D30B20F0064DD53 /* BYTrip.h */,
 				EB6097E71D30B20F0064DD53 /* BYTrip.m */,
 				EB6097EB1D32B3450064DD53 /* NSObject+BYDebugTools.h */,
@@ -421,6 +426,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F59E195388D20070C39A /* BYAppDelegate.m in Sources */,
+				EBF8687B1D34823C005221E6 /* BYAddress.m in Sources */,
 				EB6097E81D30B20F0064DD53 /* BYTrip.m in Sources */,
 				6003F5A7195388D20070C39A /* BYViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,

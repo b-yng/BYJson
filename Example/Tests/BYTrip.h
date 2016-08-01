@@ -16,20 +16,20 @@
 @property (nonatomic) NSDate *startDate;
 @property (nonatomic) NSDate *endDate;
 @property (nonatomic, readonly) NSDate *dateUpdated;
-//@property (nonatomic) QBSETripReviewState reviewState;
+//@property (nonatomic) BYTripReviewState reviewState;
 @property (nonatomic) NSString *businessPurpose;
 @property (nonatomic) NSString *notes;
-//@property (nonatomic) QBSEAddress *startAddress;
-//@property (nonatomic) QBSEAddress *endAddress;
-//@property (nonatomic) QBSELocation *startLocation;
-//@property (nonatomic) QBSELocation *endLocation;
+//@property (nonatomic) BYAddress *startAddress;
+//@property (nonatomic) BYAddress *endAddress;
+//@property (nonatomic) BYLocation *startLocation;
+//@property (nonatomic) BYLocation *endLocation;
 @property (nonatomic) id userCreated;
-//@property (nonatomic) QBSETripRoute *route;
+//@property (nonatomic) BYTripRoute *route;
 //@property (nonatomic) NSManagedObjectID *managedObjectId;
 @property (nonatomic) NSString *logFileName;
 @property (nonatomic) NSNumber *deductionAmount;
 @property (nonatomic) NSNumber *vehicleId;
 @property (nonatomic) NSString *vehicleDescription;
-//@property (nonatomic) QBSEVehicleType vehicleType;
+//@property (nonatomic) BYVehicleType vehicleType;
 
 @end

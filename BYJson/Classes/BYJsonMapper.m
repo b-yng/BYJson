@@ -35,7 +35,40 @@ static Class defaultFormattersClass;
 + (id)createInstanceOfMappableClass:(Class)clazz fromJson:(NSDictionary *)json {
     NSAssert([clazz conformsToProtocol:@protocol(BYJsonMappable)], @"Class must conform to BYJsonMappable protocol");
     
+    NSDictionary<NSString*, id> *mappingDictionary = [self mappingForMappableClass:clazz json:json];
     NSObject<BYJsonMappable> *anInstance = [[clazz alloc] init];
+    
+    [mappingDictionary enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        [anInstance setValue:obj forKey:key];
+    }];
+    
+    return anInstance;
+}
+
++ (void)setDefaultFormattersClass:(Class)formattersClass {
+    defaultFormattersClass = formattersClass;
+}
+
++ (NSDictionary *)createJsonFromJsonMappable:(NSObject<BYJsonMappable> *)jsonMappable {
+    if (jsonMappable == nil) return nil;
+    
+    Class clazz = [jsonMappable class];
+    NSArray<BYProperty*> *properties = [self propertiesOfClass:clazz];
+    for (BYProperty *property in properties) {
+        NSString *jsonKey = [self jsonKeyForClass:clazz propertyName:property.name];
+        id jsonValue = [jsonMappable valueForKey:jsonKey];
+        
+    }
+    
+    return nil;
+}
+
+#pragma mark - Helpers
+
++ (NSDictionary<NSString*, id> *)mappingForMappableClass:(Class)clazz json:(NSDictionary *)json {
+    NSAssert([clazz conformsToProtocol:@protocol(BYJsonMappable)], @"Class must conform to BYJsonMappable protocol");
+    
+    NSMutableDictionary *mappedDictionary = [[NSMutableDictionary alloc] init];
     NSArray<BYProperty*> *properties = [self propertiesOfClass:clazz];
     
     for (BYProperty *property in properties) {
@@ -48,7 +81,7 @@ static Class defaultFormattersClass;
         // TODO: this isnt true, what about enums?
         // primitives are already handled
         if (property.isPrimitive) {
-            [anInstance setValue:jsonValue forKey:property.name];
+            [mappedDictionary setValue:jsonValue forKey:property.name];
             continue;
         }
         
@@ -86,31 +119,11 @@ static Class defaultFormattersClass;
         
         NSAssert(jsonValue != nil, @"json value nil; propertyName=%@", property.name);
         
-        [anInstance setValue:jsonValue forKey:property.name];
+        [mappedDictionary setValue:jsonValue forKey:property.name];
     }
     
-    return anInstance;
+    return mappedDictionary;
 }
-
-+ (void)setDefaultFormattersClass:(Class)formattersClass {
-    defaultFormattersClass = formattersClass;
-}
-
-+ (NSDictionary *)createJsonFromJsonMappable:(NSObject<BYJsonMappable> *)jsonMappable {
-    if (jsonMappable == nil) return nil;
-    
-    Class clazz = [jsonMappable class];
-    NSArray<BYProperty*> *properties = [self propertiesOfClass:clazz];
-    for (BYProperty *property in properties) {
-        NSString *jsonKey = [self jsonKeyForClass:clazz propertyName:property.name];
-        id jsonValue = [jsonMappable valueForKey:jsonKey];
-        
-    }
-    
-    return nil;
-}
-
-#pragma mark - Helpers
 
 + (NSString *)jsonKeyForClass:(Class)clazz propertyName:(NSString *)propertyName {
     NSString *jsonKey = nil;

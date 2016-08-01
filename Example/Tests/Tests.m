@@ -29,7 +29,7 @@
     [super tearDown];
 }
 
-- (void)testQBSETrip {
+- (void)testBYTrip {
     NSDictionary *json = [self jsonFromFileNamed:@"Trip"];
     
     BYTrip *trip = [BYTrip fromJson:json];
