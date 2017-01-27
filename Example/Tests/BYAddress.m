@@ -15,4 +15,7 @@
 
 @implementation BYAddress
 
+JsonKey(street, addressLine1)
+JsonKey(countryCode, country)
+
 @end

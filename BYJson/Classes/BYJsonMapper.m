@@ -212,7 +212,7 @@ static Class defaultFormattersClass;
         free(properties);
         clazzCursor = [clazzCursor superclass];
     } while ([clazzCursor superclass] != nil);
-    
+
     return propertyArray;
 }
 

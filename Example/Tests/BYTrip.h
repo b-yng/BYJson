@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "BYAddress.h"
 #import <BYJson/BYJson.h>
 
 @interface BYTrip : NSObject
@@ -19,8 +20,8 @@
 //@property (nonatomic) BYTripReviewState reviewState;
 @property (nonatomic) NSString *businessPurpose;
 @property (nonatomic) NSString *notes;
-//@property (nonatomic) BYAddress *startAddress;
-//@property (nonatomic) BYAddress *endAddress;
+@property (nonatomic) BYAddress *startAddress;
+@property (nonatomic) BYAddress *endAddress;
 //@property (nonatomic) BYLocation *startLocation;
 //@property (nonatomic) BYLocation *endLocation;
 @property (nonatomic) id userCreated;
